@@ -38,3 +38,9 @@ elseif (preg_match('/\/api\/questions\/(\d+)$/', $path, $matches) && $method ===
     http_response_code($response['success'] ? 200 : 404);
     echo json_encode($response);
 }
+// POST /api/questions/import - import nhiều câu hỏi từ JSON
+elseif ($path === '/api/questions/import' && $method === 'POST') {
+    $response = apiImportQuestions($db_connection);
+    http_response_code($response['success'] ? 201 : 400);
+    echo json_encode($response);
+}
