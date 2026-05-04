@@ -37,6 +37,7 @@
 	<script src="../js/questions/dom-builder.js"></script>
 	<script src="../js/questions/validation.js"></script>
 	<script src="../js/questions/utils.js"></script>
+	<script src="../js/questions/import.js"></script>
 	<script src="../js/questions/main.js"></script>
 
 	<?php include('./components/footer.php'); ?>

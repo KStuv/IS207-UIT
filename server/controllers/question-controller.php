@@ -465,6 +465,139 @@ function apiDeletePassage(PDO $db, $passageId)
 	}
 }
 
+/**
+ * import nhiều câu hỏi từ file JSON
+ */
+function apiImportQuestions(PDO $db)
+{
+	try {
+		// Lấy dữ liệu từ form
+		$testId = helperGetPostValue('test_id');
+		$questionsDataJson = helperGetPostValue('questions_data', '[]');
+
+		// Kiểm tra dữ liệu 
+		if (empty($testId)) {
+			throw new Exception("test_id là bắt buộc");
+		}
+
+		$questionsData = json_decode($questionsDataJson, true);
+		if (!is_array($questionsData)) {
+			throw new Exception("Định dạng JSON không hợp lệ");
+		}
+
+		$internalTestId = helperGetInternalTestId($db, $testId);
+		if (!$internalTestId) {
+			throw new Exception("Đề thi không tồn tại");
+		}
+
+		$db->beginTransaction();
+
+		$importedCount = 0;
+		$errors = [];
+
+		// Xử lý mỗi item (mỗi item chứa 1 passage + nhiều questions)
+		foreach ($questionsData as $itemIndex => $item) {
+			try {
+				$passageId = null;
+
+				// Tạo passage nếu có
+				if (!empty($item['passage']) && is_array($item['passage'])) {
+					$passageData = [
+						'test_id' => $internalTestId,
+						'content' => $item['passage']['content'] ?? null,
+						'audio_url' => $item['passage']['audio_url'] ?? null,
+						'image_url' => $item['passage']['image_url'] ?? null
+					];
+
+					$passageId = passageCreate($db, $passageData);
+				}
+
+				// Xử lý các câu hỏi
+				if (!empty($item['questions']) && is_array($item['questions'])) {
+					foreach ($item['questions'] as $qIndex => $questionData) {
+						try {
+							// Kiem tra các trường bắt buộc
+							if (empty($questionData['part'])) {
+								throw new Exception("Thiếu part");
+							}
+							if (empty($questionData['question_number'])) {
+								throw new Exception("Thiếu question_number");
+							}
+							if (empty($questionData['content'])) {
+								throw new Exception("Thiếu content");
+							}
+							if (empty($questionData['correct_answer'])) {
+								throw new Exception("Thiếu correct_answer");
+							}
+							if (empty($questionData['options']) || !is_array($questionData['options'])) {
+								throw new Exception("Thiếu options hoặc không phải mảng");
+							}
+
+							// Kiem tra tính hợp lệ của dữ liệu
+							validateToeicPart($questionData['part']);
+
+							validateQuestionNumber($questionData['question_number'], $questionData['part']);
+
+							validateQuestionContent($questionData['content'], $questionData['part']);
+
+							$correctAnswer = strtoupper($questionData['correct_answer']);
+							validateCorrectAnswer($correctAnswer);
+
+							validateOptions($questionData['options']);
+
+							// Tạo câu hỏi
+							$qData = [
+								'test_id' => $internalTestId,
+								'passage_id' => $passageId,
+								'part' => $questionData['part'],
+								'question_number' => $questionData['question_number'],
+								'content' => $questionData['content'],
+								'audio_url' => $questionData['audio_url'] ?? null,
+								'image_url' => $questionData['image_url'] ?? null,
+								'correct_answer' => $correctAnswer,
+								'explanation' => $questionData['explanation'] ?? null
+							];
+
+							$questionId = questionCreate($db, $qData);
+
+							// Thêm các options
+							questionAddOptions($db, $questionId, $questionData['options']);
+
+							$importedCount++;
+
+						} catch (Exception $e) {
+							$errors[] = "Item " . ($itemIndex + 1) . ", Question " . ($qIndex + 1) . ": " . $e->getMessage();
+						}
+					}
+				}
+
+			} catch (Exception $e) {
+				$errors[] = "Item " . ($itemIndex + 1) . ": " . $e->getMessage();
+			}
+		}
+
+		if (count($errors) > 0) {
+			$db->rollBack();
+			throw new Exception("Có lỗi trong quá trình import: " . implode("; ", $errors));
+		}
+
+		$db->commit();
+
+		return [
+			'success' => true,
+			'message' => "Nhập thành công $importedCount câu hỏi",
+			'imported_count' => $importedCount
+		];
+
+	} catch (Exception $e) {
+		return [
+			'success' => false,
+			'message' => $e->getMessage(),
+			'code' => 'IMPORT_ERROR'
+		];
+	}
+}
+
 
 /**
  * ==========================================
