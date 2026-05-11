@@ -8,13 +8,36 @@ function toggleCreateTestForm(show) {
 }
 
 function toggleOtherForms(show) {
-	const displayStyle = show ? 'block' : 'none';
 	const elements = ['.test-config', '#partInfo', '.header-actions', '#questions-container'];
+	console.log('toggleOtherForms:', show, 'Elements:', elements);
 	
-	elements.forEach(selector => {
-		const el = document.querySelector(selector);
-		if (el) el.style.display = displayStyle;
-	});
+	// Đặt attribute trên container để dễ debug
+	const container = document.querySelector('.container-wrapper');
+	if (container) {
+		container.setAttribute('data-ui-mode', show ? 'full' : 'create-only');
+	}
+	
+	if (show) {
+		// Hiển thị
+		elements.forEach(selector => {
+			const el = document.querySelector(selector);
+			if (el) {
+				console.log('Showing:', selector);
+				el.style.display = '';
+				el.classList.remove('hidden');
+			}
+		});
+	} else {
+		// Ẩn
+		elements.forEach(selector => {
+			const el = document.querySelector(selector);
+			if (el) {
+				console.log('Hiding:', selector);
+				el.style.display = 'none';
+				el.classList.add('hidden');
+			}
+		});
+	}
 }
 
 function showMessage(message, type) {

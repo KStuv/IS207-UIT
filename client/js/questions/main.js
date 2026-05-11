@@ -14,7 +14,10 @@ function setupUIFromParams() {
 	const partSelect = document.getElementById('partSelect');
 	if (partSelect) partSelect.disabled = true;
 
+	console.log('ACTION_PARAM:', ACTION_PARAM, 'TEST_ID_PARAM:', TEST_ID_PARAM);
+
 	if (ACTION_PARAM === 'edit' && TEST_ID_PARAM) {
+		console.log('Mode: EDIT');
 		toggleCreateTestForm(false);
 		toggleOtherForms(true);
 		
@@ -30,8 +33,14 @@ function setupUIFromParams() {
 				}, 300);
 			}
 		}, 500);
+	} else if (ACTION_PARAM === 'create') {
+		// Khi nhấn "Tạo Bài Thi" từ adminTest: chỉ hiển thị form tạo, ẩn phần còn lại
+		console.log('Mode: CREATE - Hiding other forms');
+		toggleCreateTestForm(true);
+		toggleOtherForms(false);
 	} else {
-		// Mặc định hiện tất cả nhưng form tạo có thể thu gọn (nếu muốn)
+		// Mặc định hiện tất cả
+		console.log('Mode: DEFAULT - Showing all forms');
 		toggleCreateTestForm(true);
 		toggleOtherForms(true);
 		addBlock('single');
