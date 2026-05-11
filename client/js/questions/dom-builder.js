@@ -76,13 +76,11 @@ function removeSubQuestion(button) {
 		block.remove();
 	}
 	
-	updateAllQuestionNumbers();
 	updateQuestionCount();
 }
 
 function removeBlock(button) {
 	button.closest('.question-block').remove();
-	updateAllQuestionNumbers();
 	updateQuestionCount();
 }
 
