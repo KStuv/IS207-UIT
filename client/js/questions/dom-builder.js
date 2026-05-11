@@ -15,7 +15,14 @@ function addBlock(type) {
 
 	AppState.globalBlockCounter++;
 	const container = document.getElementById('questions-container');
-	const templateId = type === 'single' ? 'single-question-template' : 'group-question-template';
+	
+	let templateId;
+	if (type === 'single') {
+		templateId = part === '2' ? 'single-question-template-3options' : 'single-question-template-4options';
+	} else {
+		templateId = part === '2' ? 'group-question-template-3options' : 'group-question-template-4options';
+	}
+	
 	const template = document.getElementById(templateId);
 	if (!template) return;
 
@@ -32,7 +39,7 @@ function addBlock(type) {
 	} else {
 		const subContainer = blockDiv.querySelector('.sub-questions-container');
 		for (let i = 0; i < 3; i++) {
-			subContainer.appendChild(createSubQuestionDOM(AppState.globalBlockCounter, nextNumber + i));
+			subContainer.appendChild(createSubQuestionDOM(AppState.globalBlockCounter, nextNumber + i, part));
 		}
 	}
 
@@ -41,8 +48,9 @@ function addBlock(type) {
 	updateQuestionCount();
 }
 
-function createSubQuestionDOM(blockId, questionNumber = null) {
-	const template = document.getElementById('sub-question-template');
+function createSubQuestionDOM(blockId, questionNumber = null, part = null) {
+	const templateId = part === '2' ? 'sub-question-template-3options' : 'sub-question-template-4options';
+	const template = document.getElementById(templateId);
 	const clone = template.content.cloneNode(true);
 	const div = clone.querySelector('.sub-question-item');
 	
@@ -63,7 +71,9 @@ function addSubQuestionBtn(button) {
 	const blockDiv = button.closest('.question-block');
 	const subContainer = blockDiv.querySelector('.sub-questions-container');
 	const nextNumber = getLastQuestionNumber() + 1;
-	subContainer.appendChild(createSubQuestionDOM(blockDiv.dataset.blockId, nextNumber));
+	const partSelect = document.getElementById('partSelect');
+	const part = partSelect ? partSelect.value : null;
+	subContainer.appendChild(createSubQuestionDOM(blockDiv.dataset.blockId, nextNumber, part));
 	updateQuestionCount();
 }
 

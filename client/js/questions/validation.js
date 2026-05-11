@@ -21,7 +21,8 @@
  2. Nội dung văn bản:
  Câu hỏi đơn/câu hỏi con phải có nội dung
  Các group phải có nội dung đoạn văn 
- Phải nhập đầy đủ nội dung cho cả 4 đáp án (A, B, C, D)
+ Part 1, 3, 4: Phải nhập đầy đủ nội dung cho cả 4 đáp án (A, B, C, D)
+ Part 2: Phải nhập đầy đủ nội dung cho 3 đáp án (A, B, C)
  
  3. Đáp án đúng:
  Mỗi câu hỏi (đơn hoặc con) bắt buộc phải được tick chọn 1 đáp án đúng qua Radio button
@@ -63,7 +64,9 @@ function validateAllBlocks(blocks, part) {
             if (checkError(!block.querySelector('.question-content')?.value.trim(), `Câu #${blockIndex + 1}: Vui lòng nhập nội dung câu hỏi`)) return;
 
             const options = block.querySelectorAll('.option-content');
-            options.forEach(opt => { checkError(!opt.value.trim(), `Câu #${blockIndex + 1}: Vui lòng nhập đầy đủ 4 đáp án`); });
+            const expectedOptionsCount = part === '2' ? 3 : 4;
+            const optionsToCheck = Array.from(options).slice(0, expectedOptionsCount);
+            optionsToCheck.forEach(opt => { checkError(!opt.value.trim(), `Câu #${blockIndex + 1}: Vui lòng nhập đầy đủ ${expectedOptionsCount} đáp án`); });
             if (!isValid) return;
 
             if (checkError(!block.querySelector('.correct-radio:checked'), `Câu #${blockIndex + 1}: Vui lòng chọn đáp án đúng`)) return;
@@ -100,7 +103,10 @@ function validateAllBlocks(blocks, part) {
                 seenQuestionNumbers.add(qNum);
 
                 if (checkError(!subQ.querySelector('.question-content')?.value.trim(), `Cụm #${blockIndex + 1}, Câu #${subIndex + 1}: Thiếu nội dung`)) return;
-                subQ.querySelectorAll('.option-content').forEach(opt => { checkError(!opt.value.trim(), `Cụm #${blockIndex + 1}, Câu #${subIndex + 1}: Thiếu đáp án`); });
+                const subOptions = subQ.querySelectorAll('.option-content');
+                const expectedSubOptionsCount = part === '2' ? 3 : 4;
+                const subOptionsToCheck = Array.from(subOptions).slice(0, expectedSubOptionsCount);
+                subOptionsToCheck.forEach(opt => { checkError(!opt.value.trim(), `Cụm #${blockIndex + 1}, Câu #${subIndex + 1}: Thiếu ${expectedSubOptionsCount} đáp án`); });
                 if (checkError(!subQ.querySelector('input[type="radio"]:checked'), `Cụm #${blockIndex + 1}, Câu #${subIndex + 1}: Chưa chọn đáp án đúng`)) return;
             });
         }
