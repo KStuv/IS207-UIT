@@ -129,7 +129,7 @@
             
             // Tạo phần tử <tr> mới
             const row = document.createElement('tr');
-            row.dataset.id = test.id;
+            row.dataset.id = test.uuid;
             row.dataset.premium = isPremiumValue ? '1' : '0';
             row.dataset.active = isActiveValue ? '1' : '0';
             

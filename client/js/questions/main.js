@@ -4,10 +4,13 @@
 
 document.addEventListener('DOMContentLoaded', initApp);
 
-function initApp() {
+async function initApp() {
+	// Tải danh sách bài thi trước
+	await loadTestsData();
+	
+	// Rồi mới setup UI từ URL params
 	setupUIFromParams();
 	setupEventListeners();
-	loadTestsData();
 }
 
 function setupUIFromParams() {

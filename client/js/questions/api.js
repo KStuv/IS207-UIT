@@ -57,8 +57,8 @@ async function loadTestsData() {
 
 		result.data.forEach(test => {
 			const option = document.createElement('option');
-			option.value = test.id;
-			option.textContent = test.title || `Đề thi ${test.id}`;
+			option.value = test.uuid;
+			option.textContent = test.title || `Đề thi ${test.uuid}`;
 			testSelect.appendChild(option);
 		});
 	} catch (error) {
