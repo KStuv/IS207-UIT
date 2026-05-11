@@ -107,6 +107,8 @@ function importQuestionsToServer(testId, jsonData, successDiv, errorDiv) {
 			showSuccess(`Nhập thành công ${data.imported_count} câu hỏi`, successDiv);
 			setTimeout(() => {
 				closeImportModal();
+				// Reload lại form với câu hỏi vừa import
+				loadSavedQuestionsToForm();
 			}, 1500);
 		} else {
 			showError(data.message || 'Lỗi khi import', errorDiv);

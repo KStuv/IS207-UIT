@@ -28,10 +28,11 @@ function validateQuestionContent($content, $part = null)
 /**
  * Kiểm tra mảng đáp án
  */
-function validateOptions($options)
+function validateOptions($options, $part = null)
 {
-	if (!is_array($options) || count($options) !== 4) {
-		throw new InvalidArgumentException("Câu hỏi phải có chính xác 4 đáp án.");
+	$expectedCount = ($part === '2' || $part === 2) ? 3 : 4;
+	if (!is_array($options) || count($options) !== $expectedCount) {
+		throw new InvalidArgumentException("Câu hỏi phải có chính xác $expectedCount đáp án.");
 	}
 
 	$labels = ['A', 'B', 'C', 'D'];

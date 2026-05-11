@@ -31,7 +31,7 @@ function apiCreateQuestion(PDO $db)
 		validateQuestionNumber($questionNumber, $part);
 		validateQuestionContent($content, $part);
 		validateCorrectAnswer($correctAnswer);
-		validateOptions($options);
+		validateOptions($options, $part);
 
 		if (!empty($explanation)) {
 			validateExplanation($explanation);
@@ -169,7 +169,7 @@ function apiCreateQuestionsFromForm(PDO $db)
 
 				validateQuestionContent($qData['content'], $part);
 				validateCorrectAnswer($qData['correct_answer']);
-				validateOptions($questionData['options']);
+				validateOptions($questionData['options'], $part);
 
 				$questionId = questionCreate($db, $qData);
 				$createdQuestions[] = [
@@ -543,7 +543,7 @@ function apiImportQuestions(PDO $db)
 							$correctAnswer = strtoupper($questionData['correct_answer']);
 							validateCorrectAnswer($correctAnswer);
 
-							validateOptions($questionData['options']);
+							validateOptions($questionData['options'], $questionData['part']);
 
 							// Tạo câu hỏi
 							$qData = [

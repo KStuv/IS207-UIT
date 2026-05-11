@@ -14,7 +14,7 @@ function fillBaseQuestionUI(container, question) {
 	setVal('.explanation', (question.explanation && question.explanation !== 'null') ? question.explanation : '');
 
 	const optionInputs = container.querySelectorAll('.option-content');
-	if (question.options && question.options.length === 4) {
+	if (question.options && (question.options.length === 3 || question.options.length === 4)) {
 		question.options.forEach((opt, idx) => { if (optionInputs[idx]) optionInputs[idx].value = opt.content || ''; });
 	}
 
