@@ -115,10 +115,11 @@
         }
         
         // Duyệt qua từng bài thi và render hàng
-        tests.forEach(test => {
-            // Chuyển đổi giá trị số thành boolean (1 = true, 0 = false)
-            const isPremiumValue = parseInt(test.is_premium) === 1;
-            const isActiveValue = parseInt(test.is_active) === 1;
+        tests.forEach((test, idx) => {
+            // Xử lý is_premium: có thể là boolean hoặc số
+            const isPremiumValue = test.is_premium === true || test.is_premium === 1 || test.is_premium === '1';
+            // Xử lý is_active: có thể là boolean hoặc số
+            const isActiveValue = test.is_active === true || test.is_active === 1 || test.is_active === '1';
             
             // Chuẩn bị text và CSS class cho badge
             const isPremiumText = isPremiumValue ? 'Premium' : 'Thường';
@@ -198,20 +199,22 @@
             // Tìm kiếm theo tiêu đề (không phân biệt hoa/thường)
             const titleMatch = test.title.toLowerCase().includes(searchText);
             
-            // Lọc theo phân loại
+            // Lọc theo phân loại - xử lý cả boolean và số
             let categoryMatch = true;
+            const isPremium = test.is_premium === true || test.is_premium === 1 || test.is_premium === '1';
             if (categoryValue === 'Premium') {
-                categoryMatch = parseInt(test.is_premium) === 1;
+                categoryMatch = isPremium;
             } else if (categoryValue === 'Thường') {
-                categoryMatch = parseInt(test.is_premium) === 0;
+                categoryMatch = !isPremium;
             }
             
-            // Lọc theo trạng thái
+            // Lọc theo trạng thái - xử lý cả boolean và số
             let statusMatch = true;
+            const isActive = test.is_active === true || test.is_active === 1 || test.is_active === '1';
             if (statusValue === 'Hoạt động') {
-                statusMatch = parseInt(test.is_active) === 1;
+                statusMatch = isActive;
             } else if (statusValue === 'Tạm ẩn') {
-                statusMatch = parseInt(test.is_active) === 0;
+                statusMatch = !isActive;
             }
             
             return titleMatch && categoryMatch && statusMatch;
