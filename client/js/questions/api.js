@@ -293,11 +293,6 @@ async function submitSingleQuestionAPIWithResult(block, testId, part) {
 		const questionId = block.dataset.questionId;
 		if (questionId) {
 			await fetch('/api/questions/' + questionId, { method: 'DELETE' });
-			// Xóa existing URL để không gửi lại file cũ
-			const audioIn = block.querySelector('.audio-file');
-			const imageIn = block.querySelector('.image-file');
-			if (audioIn) delete audioIn.dataset.existingUrl;
-			if (imageIn) delete imageIn.dataset.existingUrl;
 		}
 
 		const formData = new FormData();
@@ -343,11 +338,6 @@ async function submitGroupQuestionsAPI(block, testId, part) {
 		const existingPassageId = block.dataset.passageId;
 		if (existingPassageId) {
 			await fetch('/api/passages/' + existingPassageId, { method: 'DELETE' });
-			// Xóa existing URL để không gửi lại file cũ
-			const aIn = block.querySelector('.group-audio-file');
-			const iIn = block.querySelector('.group-image-file');
-			if (aIn) delete aIn.dataset.existingUrl;
-			if (iIn) delete iIn.dataset.existingUrl;
 		}
 
 		const pFormData = new FormData();
