@@ -11,9 +11,7 @@
 <body>
 	<?php include('./components/metadata.php'); ?>
 	<?php include('./components/navBar.php'); ?>
-	<?php include('./components/header.php'); ?>
-
-	<div class="container-wrapper">
+<main class="container-wrapper">
 		<!-- Test Creation Form -->
 		<?php include('./components/questions/test-form.php'); ?>
 
@@ -25,7 +23,7 @@
 
 		<!-- Questions List Container -->
 		<div id="questions-container"></div>
-	</div>
+	</main>
 
 	<!-- Question Templates (Hidden) -->
 	<?php include('./components/questions/question-templates.php'); ?>
@@ -39,7 +37,6 @@
 	<script src="../js/questions/utils.js"></script>
 	<script src="../js/questions/import.js"></script>
 	<script src="../js/questions/main.js"></script>
-
 	<?php include('./components/footer.php'); ?>
 </body>
 </html>
