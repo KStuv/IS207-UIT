@@ -15,12 +15,13 @@ body {
     background-color: var(--bg-color);
     color: var(--text-main);
     margin: 0;
-    padding: 20px;
+    padding: 0;
 }
 
-.container {
+main.container {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 20px;
 }
 
 /* --- CÁC STYLE CŨ GIỮ NGUYÊN --- */
@@ -345,4 +346,30 @@ tbody tr {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+}
+
+/* --- STYLES CHO BUTTON TẠO BÀI THI --- */
+.create-test-button {
+    text-decoration: none;
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.create-test-button:hover {
+    background-color: var(--primary-hover);
+}
+
+.create-test-section {
+    margin-top: 25px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
 }
